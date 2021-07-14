@@ -6,13 +6,13 @@ import {
   Container,
   FormControl,
   InputGroup,
-  Row
+  Row,
 } from "react-bootstrap";
 import { set } from "lodash";
 
 import AddUser from "./AddUser";
 import OtherData from "./OtherData";
-import Todo from "./Todos";
+import Todos from "./TodosAndPosts";
 
 class TodoCard extends React.Component {
   constructor(props) {
@@ -20,9 +20,10 @@ class TodoCard extends React.Component {
     this.state = {
       filter: "",
       users: [],
-
+      showSelected: false,
       add: false,
-      selectedTodo: null
+      selectedTodo: null,
+      selectedUser: null,
     };
   }
 
@@ -39,13 +40,13 @@ class TodoCard extends React.Component {
       ...this.state,
       users: this.state.users.map((u) => {
         const newUser = {
-          ...u
+          ...u,
         };
         if (u.id === id) {
           set(newUser, id, field, value);
         }
         return newUser;
-      })
+      }),
     });
   }
 
@@ -53,7 +54,7 @@ class TodoCard extends React.Component {
     this.setState({
       ...this.state,
       add: false,
-      users: [...this.state.users, user]
+      users: [...this.state.users, user],
     });
   }
 
@@ -62,14 +63,14 @@ class TodoCard extends React.Component {
       ...this.state,
       users: this.state.users.map((u) => ({
         ...u,
-        editable: u.id === id ? !u.editable : u.editable
-      }))
+        editable: u.id === id ? !u.editable : u.editable,
+      })),
     });
   }
 
   removeUser(id) {
     this.setState({
-      users: this.state.users.filter((user) => user.id !== id)
+      users: this.state.users.filter((user) => user.id !== id),
     });
   }
 
@@ -87,7 +88,7 @@ class TodoCard extends React.Component {
                   display: "flex",
                   justifyContent: "center",
                   marginTop: 10,
-                  marginBottom: 19
+                  marginBottom: 19,
                 }}
               >
                 <Col sm={4}>
@@ -99,14 +100,21 @@ class TodoCard extends React.Component {
                     onChange={(evt) =>
                       this.setState({
                         ...this.state,
-                        filter: evt.target.value
+                        filter: evt.target.value,
                       })
                     }
                   />
                 </Col>
 
                 <Col sm={4}>
-                  <Button onClick={() => this.setState({ add: true })}>
+                  <Button
+                    onClick={() =>
+                      this.setState({
+                        ...this.state,
+                        addUsers: !this.state.addUsers,
+                      })
+                    }
+                  >
                     Add
                   </Button>
                 </Col>
@@ -114,11 +122,10 @@ class TodoCard extends React.Component {
             </Row>
           </Container>
           <Container>
-            {this.state.add ? (
+            {this.state.addUsers && (
               <AddUser addUser={(user) => this.addUser(user)} />
-            ) : (
-              <> </>
             )}
+
             {this.state.users
               .filter(
                 (user) =>
@@ -137,10 +144,11 @@ class TodoCard extends React.Component {
                     </Col>
                     <Col sm={3} style={{ marginTop: "10px" }}>
                       <Button
-                        onClick={(users) =>
+                        onClick={() =>
                           this.setState({
                             ...this.state,
-                            selectedItem: users
+                            selectedUser:
+                              user === this.state.selectedUser ? null : user,
                           })
                         }
                       >
@@ -207,12 +215,8 @@ class TodoCard extends React.Component {
                     </Row>
                   </Row>
                   <Row>
-                  {this.state.selectedItem && (
-                      <Todo
-                        user={user}
-                        users={this.state.users}
-                        {...this.state.selectedITem}
-                      />
+                    {this.state.selectedUser === user && (
+                      <Todos user={user} users={this.state.users} />
                     )}
                   </Row>
                 </Card>

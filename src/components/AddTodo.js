@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-
-import AddUserModal from "./AddUserModal";
+import AddTodoModal from "./AddTodoModal";
 
 export default class AddTodo extends Component {
   closeChild = () => {
     this.setState({
-      showChild: false
+      showChild: false,
+      
     });
   };
 
   constructor(...args) {
     super(...args);
     this.state = {
-      showChild: true
+      showChild: true,
     };
   }
 
@@ -20,9 +20,9 @@ export default class AddTodo extends Component {
     return (
       <div>
         {this.state.showChild && (
-          <AddUserModal
-            addUser={this.props.addUser}
-            onClose={this.closeChild}
+          <AddTodoModal
+            addTodo={this.props.addTodo}
+            onClose={this.closeChild }
           />
         )}
       </div>

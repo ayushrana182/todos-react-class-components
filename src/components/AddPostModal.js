@@ -5,8 +5,8 @@ export default class AddUserModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      email: ""
+      title: "",
+      body: "",
     };
   }
   render() {
@@ -17,46 +17,46 @@ export default class AddUserModal extends Component {
             style={{
               display: "flex",
               justifyContent: "center",
-              marginTop: "10px"
+              marginTop: "10px",
             }}
           >
-            Add New User
+            Add New Post
           </Card.Title>
           <Card.Body>
-            Name:{" "}
+            Title:{" "}
             <FormControl
               onChange={(evt) =>
                 this.setState({
                   ...this.state,
-                  name: evt.target.value
+                  title: evt.target.value,
                 })
               }
-              value={this.state.name}
-              placeholder="Enter a Name"
+              value={this.state.title}
+              placeholder="Some Title"
             />
           </Card.Body>
 
           <Card.Body>
-            Email:{" "}
+            Body:{" "}
             <FormControl
               onChange={(evt) =>
                 this.setState({
                   ...this.state,
-                  email: evt.target.value
+                  body: evt.target.value,
                 })
               }
-              value={this.state.email}
-              placeholder="Enter an Email"
+              value={this.state.body}
+              placeholder="Some Body"
             />
           </Card.Body>
           <Row
             style={{
               display: "flex",
               justifyContent: "space-evenly",
-              marginBottom: "10px"
+              marginBottom: "10px",
             }}
           >
-            <Button onClick={() => this.props.addUser(this.state)}>Add</Button>
+            <Button onClick={() => this.props.addPost(this.state)}>Add</Button>
             <Button variant="danger" onClick={this.props.onClose}>
               Cancel
             </Button>

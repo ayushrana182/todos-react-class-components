@@ -1,18 +1,17 @@
 import React, { Component } from "react";
+import AddPostModal from "./AddPostModal";
 
-import AddUserModal from "./AddUserModal";
-
-export default class AddTodo extends Component {
+export default class AddPost extends Component {
   closeChild = () => {
     this.setState({
-      showChild: false
+      showChild: false,
     });
   };
 
   constructor(...args) {
     super(...args);
     this.state = {
-      showChild: true
+      showChild: true,
     };
   }
 
@@ -20,8 +19,8 @@ export default class AddTodo extends Component {
     return (
       <div>
         {this.state.showChild && (
-          <AddUserModal
-            addUser={this.props.addUser}
+          <AddPostModal
+            addUser={this.props.addPost}
             onClose={this.closeChild}
           />
         )}
