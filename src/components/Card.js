@@ -9,7 +9,6 @@ import {
   Row,
 } from "react-bootstrap";
 import { set } from "lodash";
-
 import AddUser from "./AddUser";
 import OtherData from "./OtherData";
 import Todos from "./TodosAndPosts";
@@ -55,7 +54,9 @@ class TodoCard extends React.Component {
       ...this.state,
       add: false,
       users: [...this.state.users, user],
+
     });
+    if (!user) { console.log('user is null or undefined'); }
   }
 
   toggleEditable(id) {

@@ -6,7 +6,8 @@ export default class AddUserModal extends Component {
     super(props);
     this.state = {
       name: "",
-      email: ""
+      email: "",
+      id: ""
     };
   }
   render() {
@@ -17,18 +18,31 @@ export default class AddUserModal extends Component {
             style={{
               display: "flex",
               justifyContent: "center",
-              marginTop: "10px"
+              marginTop: "10px",
             }}
           >
             Add New User
           </Card.Title>
+          <Card.Body>
+            ID:{" "}
+            <FormControl
+              onChange={(evt) =>
+                this.setState({
+                  ...this.state,
+                  id: evt.target.value,
+                })
+              }
+              value={this.state.id}
+              placeholder="Enter an Unique ID"
+            />
+          </Card.Body>
           <Card.Body>
             Name:{" "}
             <FormControl
               onChange={(evt) =>
                 this.setState({
                   ...this.state,
-                  name: evt.target.value
+                  name: evt.target.value,
                 })
               }
               value={this.state.name}
@@ -42,21 +56,23 @@ export default class AddUserModal extends Component {
               onChange={(evt) =>
                 this.setState({
                   ...this.state,
-                  email: evt.target.value
+                  email: evt.target.value,
                 })
               }
               value={this.state.email}
               placeholder="Enter an Email"
             />
           </Card.Body>
+
           <Row
             style={{
               display: "flex",
               justifyContent: "space-evenly",
-              marginBottom: "10px"
+              marginBottom: "10px",
             }}
           >
             <Button onClick={() => this.props.addUser(this.state)}>Add</Button>
+            {this.state.add}
             <Button variant="danger" onClick={this.props.onClose}>
               Cancel
             </Button>

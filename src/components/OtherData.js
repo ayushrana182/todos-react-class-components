@@ -39,7 +39,7 @@ export default class OtherData extends Component {
                   Street
                   <FormControl
                     readOnly={this.props.readOnly}
-                    value={this.props.user.address.street}
+                    value={this.props.user.address?.street ?? ""}
                     onChange={(evt) =>
                       this.props.setUserField(
                         "address.street",
@@ -54,7 +54,7 @@ export default class OtherData extends Component {
                   City:{" "}
                   <FormControl
                     readOnly={this.props.readOnly}
-                    value={this.props.user.address.city}
+                    value={this.props.user.address?.city ?? ""}
                     onChange={(evt) =>
                       this.props.setUserField("address.city", evt.target.value)
                     }
@@ -67,7 +67,7 @@ export default class OtherData extends Component {
                   ZipCode:{" "}
                   <FormControl
                     readOnly={this.props.readOnly}
-                    value={this.props.user.address.zipcode}
+                    value={this.props.user.address?.zipcode ?? ""}
                     onChange={(evt) =>
                       this.props.setUserField(
                         "address.zipcode",
