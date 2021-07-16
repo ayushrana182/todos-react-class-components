@@ -9,9 +9,10 @@ import {
   Row,
 } from "react-bootstrap";
 import { set } from "lodash";
+
 import AddUser from "./AddUser";
-import OtherData from "./OtherData";
 import Todos from "./TodosAndPosts";
+import OtherData from "./OtherData";
 
 class TodoCard extends React.Component {
   constructor(props) {
@@ -19,7 +20,8 @@ class TodoCard extends React.Component {
     this.state = {
       filter: "",
       users: [],
-      showSelected: false,
+      bool: false,
+
       add: false,
       selectedTodo: null,
       selectedUser: null,
@@ -42,7 +44,7 @@ class TodoCard extends React.Component {
           ...u,
         };
         if (u.id === id) {
-          set(newUser, id, field, value);
+          set(newUser, field, value);
         }
         return newUser;
       }),
@@ -54,9 +56,7 @@ class TodoCard extends React.Component {
       ...this.state,
       add: false,
       users: [...this.state.users, user],
-
     });
-    if (!user) { console.log('user is null or undefined'); }
   }
 
   toggleEditable(id) {
@@ -80,150 +80,138 @@ class TodoCard extends React.Component {
 
     return (
       <>
-        <Row sm={7}>
-          <Container>
-            <Row>
-              <InputGroup
-                size="sm"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: 10,
-                  marginBottom: 19,
-                }}
+        <Container>
+          <Row>
+            <InputGroup
+              size="sm"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: 10,
+                marginBottom: 19,
+              }}
+            >
+              <Col sm={4}>
+                <FormControl
+                  placeholder="Search"
+                  aria-label="Search"
+                  aria-describedby="Search"
+                  value={this.state.filter}
+                  onChange={(evt) =>
+                    this.setState({
+                      ...this.state,
+                      filter: evt.target.value,
+                    })
+                  }
+                />
+              </Col>
+
+              <Col sm={4}>
+                <Button onClick={() => this.setState({ add: true })}>
+                  Add
+                </Button>
+              </Col>
+            </InputGroup>
+          </Row>
+        </Container>
+        <Container style={{ width: "80%" }}>
+          {this.state.add ? (
+            <AddUser addUser={(user) => this.addUser(user)} />
+          ) : (
+            <> </>
+          )}
+          {this.state.users
+            .filter(
+              (user) =>
+                user.email.toLowerCase().includes(searchQuery) ||
+                user.name.toLowerCase().includes(searchQuery)
+            )
+            .map((user) => (
+              <Card
+                border="danger"
+                key={user.id}
+                style={{ marginTop: 5, marginBottom: 5 }}
               >
-                <Col sm={4}>
-                  <FormControl
-                    placeholder="Search"
-                    aria-label="Search"
-                    aria-describedby="Search"
-                    value={this.state.filter}
-                    onChange={(evt) =>
-                      this.setState({
-                        ...this.state,
-                        filter: evt.target.value,
-                      })
-                    }
-                  />
-                </Col>
-
-                <Col sm={4}>
-                  <Button
-                    onClick={() =>
-                      this.setState({
-                        ...this.state,
-                        addUsers: !this.state.addUsers,
-                      })
-                    }
-                  >
-                    Add
-                  </Button>
-                </Col>
-              </InputGroup>
-            </Row>
-          </Container>
-          <Container>
-            {this.state.addUsers && (
-              <AddUser addUser={(user) => this.addUser(user)} />
-            )}
-
-            {this.state.users
-              .filter(
-                (user) =>
-                  user.email.toLowerCase().includes(searchQuery) ||
-                  user.name.toLowerCase().includes(searchQuery)
-              )
-              .map((user) => (
-                <Card
-                  border="danger"
-                  key={user.id}
-                  style={{ marginTop: 5, marginBottom: 5 }}
-                >
-                  <Row>
-                    <Col sm={3}>
-                      <Card.Body>ID: {user.id}</Card.Body>
-                    </Col>
-                    <Col sm={3} style={{ marginTop: "10px" }}>
-                      <Button
-                        onClick={() =>
-                          this.setState({
-                            ...this.state,
-                            selectedUser:
-                              user === this.state.selectedUser ? null : user,
-                          })
+                <Row>
+                  <Col sm={3}>
+                    <Card.Body>ID: {user.id}</Card.Body>
+                  </Col>
+                  <Col sm={3} style={{ marginTop: "10px" }}>
+                    <Button
+                      onClick={() =>
+                        this.setState({
+                          ...this.state,
+                          selectedUser:
+                            user === this.state.selectedUser ? null : user,
+                        })
+                      }
+                    >
+                      Select
+                    </Button>
+                  </Col>
+                  <Col sm={8}>
+                    <Card.Body>
+                      Name:{" "}
+                      <FormControl
+                        readOnly={!user.editable}
+                        value={user.name}
+                        onChange={(evt) =>
+                          this.setUserField(user.id, "name", evt.target.value)
                         }
-                      >
-                        Select
+                      />
+                    </Card.Body>
+                  </Col>
+
+                  <Col sm={8}>
+                    <Card.Body>
+                      Email:{" "}
+                      <FormControl
+                        readOnly={!user.editable}
+                        value={user.email}
+                        onChange={(evt) =>
+                          this.setUserField(user.id, "email", evt.target.value)
+                        }
+                      />
+                    </Card.Body>
+                  </Col>
+
+                  <Row>
+                    <Col></Col>
+                  </Row>
+                  <Col sm={8}>
+                    <OtherData
+                      setUserField={(field, value) =>
+                        this.setUserField(user.id, field, value)
+                      }
+                      user={user}
+                      readOnly={!user.editable}
+                    />
+                  </Col>
+                  <Row>
+                    <Col
+                      sm={{ span: 1, offset: 4 }}
+                      style={{ marginRight: "15px" }}
+                    >
+                      <Button onClick={() => this.toggleEditable(user.id)}>
+                        Update
                       </Button>
                     </Col>
-                    <Col sm={8}>
-                      <Card.Body>
-                        Name:{" "}
-                        <FormControl
-                          readOnly={!user.editable}
-                          value={user.name}
-                          onChange={(evt) =>
-                            this.setUserField(user.id, "name", evt.target.value)
-                          }
-                        />
-                      </Card.Body>
-                    </Col>
 
-                    <Col sm={8}>
-                      <Card.Body>
-                        Email:{" "}
-                        <FormControl
-                          readOnly={!user.editable}
-                          value={user.email}
-                          onChange={(evt) =>
-                            this.setUserField(
-                              user.id,
-                              "email",
-                              evt.target.value
-                            )
-                          }
-                        />
-                      </Card.Body>
+                    <Col sm={{ span: 1, offset: 2 }}>
+                      <Button onClick={() => this.removeUser(user.id)}>
+                        Delete
+                      </Button>
                     </Col>
-
-                    <Row>
-                      <Col></Col>
-                    </Row>
-                    <Col sm={8}>
-                      <OtherData
-                        setUserField={(field, value) =>
-                          this.setUserField(user.id, field, value)
-                        }
-                        user={user}
-                        readOnly={!user.editable}
-                      />
-                    </Col>
-                    <Row>
-                      <Col
-                        sm={{ span: 1, offset: 2 }}
-                        style={{ marginRight: "15px" }}
-                      >
-                        <Button onClick={() => this.toggleEditable(user.id)}>
-                          Update
-                        </Button>
-                      </Col>
-
-                      <Col sm={{ span: 1, offset: 2 }}>
-                        <Button onClick={() => this.removeUser(user.id)}>
-                          Delete
-                        </Button>
-                      </Col>
-                    </Row>
                   </Row>
-                  <Row>
-                    {this.state.selectedUser === user && (
-                      <Todos user={user} users={this.state.users} />
-                    )}
-                  </Row>
-                </Card>
-              ))}
-          </Container>
-        </Row>
+                </Row>
+                <Row>
+                  {this.state.selectedUser === user && (
+                    <Todos user={user} users={this.state.users} />
+                  )}
+                </Row>
+              </Card>
+            ))}
+        </Container>
       </>
     );
   }
