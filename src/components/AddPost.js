@@ -20,7 +20,7 @@ export default class AddPost extends Component {
       <div>
         {this.state.showChild && (
           <AddPostModal
-            addUser={this.props.addPost}
+            addPost={this.props.addPost}
             onClose={this.closeChild}
           />
         )}

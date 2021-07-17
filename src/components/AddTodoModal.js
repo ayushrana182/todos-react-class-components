@@ -42,7 +42,8 @@ export default class AddTodoModal extends Component {
               marginBottom: "10px",
             }}
           >
-            <Button onClick={() => this.props.addTodo(this.state)}>Add</Button>
+            <Button onClick={() => (this.props.addTodo(this.state))}>Add</Button>
+            
             <Button variant="danger" onClick={this.props.onClose}>
               Cancel
             </Button>

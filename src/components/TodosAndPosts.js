@@ -10,15 +10,15 @@ import Todo from "./Todo";
 import Post from "./Post";
 import AddTodo from "./AddTodo";
 import AddPost from "./AddPost";
-
+import { v4 as uuidv4 } from 'uuid';
 class Todos extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [],
       posts: [],
-
-      addTodo: false,
+      addPosts: false,
+      addTodos: false,
     };
   }
 
@@ -40,17 +40,19 @@ class Todos extends React.Component {
     this.setState({
       ...this.state,
       addPosts: false,
-      posts: [...this.state.posts, post],
+      posts: [...this.state.posts, {id: uuidv4(), ...post, userId: this.props.user.id}],
     });
   }
 
-  addTodo(todo) {
+  addTodo = (todo) => {
     this.setState({
       ...this.state,
       addTodos: false,
-      todos: [...this.state.todos, todo],
+      todos: [...this.state.todos, {id: uuidv4(), ...todo, userId: this.props.user.id}],
     });
+
   }
+  
 
   handleMarkTodoCompleted = (e) => {
     const todoId = parseInt(e.currentTarget.dataset.id, 10);
@@ -100,6 +102,7 @@ class Todos extends React.Component {
                   .filter((p) => this.props.user.id === p.userId)
                   .map((todo) => (
                     <Todo
+                    addTodo={this.addTodo}
                       todo={todo}
                       key={todo.id}
                       handleMarkTodoCompleted={this.handleMarkTodoCompleted}
@@ -136,7 +139,7 @@ class Todos extends React.Component {
                 {this.state.posts
                   .filter((p) => this.props.user.id === p.userId)
                   .map((post) => (
-                    <Post post={post} key={post.id} />
+                    <Post post={post} key={post.id} addPost={this.addPost} />
                   ))}
               </Card>
             </Col>
