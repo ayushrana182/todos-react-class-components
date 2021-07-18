@@ -23,6 +23,7 @@ export default class AddTodo extends Component {
           <AddTodoModal
             addTodo={this.props.addTodo}
             onClose={this.closeChild }
+            handleMarkTodoCompleted={this.handleMarkTodoCompleted}
           />
         )}
       </div>

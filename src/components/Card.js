@@ -21,7 +21,6 @@ class TodoCard extends React.Component {
       filter: "",
       users: [],
       bool: false,
-
       add: false,
       selectedTodo: null,
       selectedUser: null,

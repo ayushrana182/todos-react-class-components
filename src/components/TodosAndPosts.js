@@ -48,7 +48,7 @@ class Todos extends React.Component {
     this.setState({
       ...this.state,
       addTodos: false,
-      todos: [...this.state.todos, {id: uuidv4(), ...todo, userId: this.props.user.id}],
+      todos: [...this.state.todos, {id: uuidv4(), ...todo,  userId: this.props.user.id}],
     });
 
   }
@@ -60,7 +60,7 @@ class Todos extends React.Component {
     this.setState((currentState) => ({
       todos: currentState.todos.map((todo) => {
         if (todo.id === todoId) {
-          console.log("found todo ", todo.id);
+          console.log("found todo ");
           return { ...todo, completed: true };
         }
         return todo;
